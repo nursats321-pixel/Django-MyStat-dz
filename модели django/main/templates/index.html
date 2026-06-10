@@ -1,0 +1,28 @@
+<!DOCTYPE html> <html> 
+    
+
+<head>
+    <meta charset="UTF-8">
+    <title>Наш первый чат на Django</title> 
+    </head> 
+    <body> 
+        <form method='POST'>
+            {% csrf_token %} <input type="text" name="text" placeholder="Введите сообщение..." required>
+            <button type="submit"> Отправить</button>
+        </form>
+
+        <hr>
+
+        <h3> Стена сообщений: </h3>
+        
+        {% for msg in messages  %}
+            <div style="border: 1px solid #333; padding: 10px; margin-bottom: 5px;">
+                <strong> {{msg.author.username}} </strong>
+                <small style="color: gray;">({{ msg.created_at }}) </small>
+                    <p> {{ msg.text }} </p>
+
+                </div>
+        {% endfor %}
+            
+
+    </body> </html>

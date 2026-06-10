@@ -1,40 +1,47 @@
-from django.shortcuts import (
-    render, redirect
-)  
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-
-from django.http import HttpResponse
+from django.contrib.auth import authenticate, login
 
 
 def register(request):
     if request.method == 'POST':
-        
-        username = request.POST.get('username') 
-        
+
+        username = request.POST.get('username')
         password = request.POST.get('password')
 
         if User.objects.filter(username=username).exists():
-            
+
             return render(request, "user_have.html")
 
-        
-        
         User.objects.create_user(
-            username= username,
-            password= password
+            username=username,
+            password=password
         )
-        
+
         return render(request, "login.html")
-    
+
     return render(request, "register.html")
-        
+
 
 def login_view(request):
 
-        
-        if request.method == 'POST':
+    if request.method == 'POST':
+
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
+
+            login(request, user)
+
             return redirect('/admin/')
 
+        return render(request, "login_error.html")
 
-        return render(request, "login.html")
-
+    return render(request, "login.html")
